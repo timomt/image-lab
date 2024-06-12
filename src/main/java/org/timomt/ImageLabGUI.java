@@ -27,7 +27,7 @@ public class ImageLabGUI extends JFrame {
 
         this.add(mainPanel);
         this.setTitle("Image Lab");
-        this.setPreferredSize(new Dimension(900, 500));
+        this.setPreferredSize(new Dimension(900, 900));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
         this.setVisible(true);

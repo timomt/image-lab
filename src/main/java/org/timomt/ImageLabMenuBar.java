@@ -14,7 +14,7 @@ public class ImageLabMenuBar extends JMenuBar {
 
         JMenu fileMenu = new JMenu("Image");
 
-        JMenuItem loadImage = new JMenuItem("Load Image ...");
+        JMenuItem loadImage = new JMenuItem("Load Image ...");  // TODO: not supporting png, only jpg
         loadImage.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
             int retVal = fileChooser.showOpenDialog(loadImage);

@@ -7,7 +7,7 @@ public final class ImageTransformer {
     private ImageTransformer() {}
 
     public enum MATRIX_TARGETS  {
-            RGB, XYZ
+            RGB, XY
     };
 
     public static BufferedImage transform(BufferedImage image, double[][] matrix, MATRIX_TARGETS target) {
@@ -31,6 +31,21 @@ public final class ImageTransformer {
                         if (transformedRGB[i] < 0) transformedRGB[i] = 0;
                     }
                     newImageRaster.setPixel(x, y, transformedRGB);
+                }
+            }
+            newImage.setData(newImageRaster);
+            return newImage;
+        } else if (target == MATRIX_TARGETS.XY) {
+            for (int x = 0; x < image.getWidth(); x++) {
+                for (int y = 0; y < image.getHeight(); y++) {
+                    int[] rgb = imageRaster.getPixel(x, y, (int[]) null);
+                    int transformedXCoord = (int) Math.round(matrix[0][0] * x + matrix[0][1] * y + matrix[0][2]);
+                    int transformedYCoord = (int) Math.round(matrix[1][0] * x + matrix[1][1] * y + matrix[1][2]);
+
+                    if (transformedXCoord >= 0 && transformedXCoord < image.getWidth()
+                            && transformedYCoord >= 0 && transformedYCoord < image.getWidth()) {
+                        newImageRaster.setPixel(transformedXCoord, transformedYCoord, rgb);
+                    }
                 }
             }
             newImage.setData(newImageRaster);

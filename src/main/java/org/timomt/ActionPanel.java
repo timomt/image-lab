@@ -1,6 +1,7 @@
 package org.timomt;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -21,30 +22,78 @@ public class ActionPanel extends JPanel {
     private final JComboBox<ImageTransformer.MATRIX_TARGETS> matrixTargetComboBox =
             new JComboBox<>(ImageTransformer.MATRIX_TARGETS.values());
 
+    private final JComboBox<String> operationComboBox = new JComboBox<>(matrixOperations);
+
     public ActionPanel(ImageLabGUI gui) {
         this.setLayout(new GridLayout(1, 3, 10, 10));
-        this.setBorder(new MatteBorder(new Insets(2, 2, 2, 2), Color.DARK_GRAY));
+        this.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         JPanel leftPanel = new JPanel(new GridLayout(2, 2));
         JLabel matrixTargetJLabel = new JLabel("Target property:");
-        leftPanel.add(matrixTargetJLabel);
+        matrixTargetJLabel.setHorizontalAlignment(JLabel.CENTER);
 
-        leftPanel.add(matrixTargetComboBox);
+        this.matrixTargetComboBox.addActionListener(e -> {
+            if (matrixTargetComboBox.getSelectedItem() == ImageTransformer.MATRIX_TARGETS.XY) {
+                matrixFields[2][0].setText("-");
+                matrixFields[2][1].setText("-");
+                matrixFields[2][2].setText("-");
+                matrixFields[2][0].setEditable(false);
+                matrixFields[2][1].setEditable(false);
+                matrixFields[2][2].setEditable(false);
+                matrixFields[0][2].setText("0");
+                matrixFields[1][2].setText("0");
+                matrixFields[0][2].setEditable(false);
+                matrixFields[1][2].setEditable(false);
+                operationComboBox.setModel(new DefaultComboBoxModel<>(new String[]{"linear", "affine"}));
+            } else {
+                matrixFields[2][0].setText("0");
+                matrixFields[2][1].setText("0");
+                matrixFields[2][2].setText("0");
+                matrixFields[2][0].setEditable(true);
+                matrixFields[2][1].setEditable(true);
+                matrixFields[2][2].setEditable(true);
+                matrixFields[0][2].setEditable(true);
+                matrixFields[1][2].setEditable(true);
+                operationComboBox.setModel(new DefaultComboBoxModel<>(matrixOperations));
+            }
+        });
+
+        leftPanel.add(matrixTargetJLabel);
+        leftPanel.add(this.matrixTargetComboBox);
+
         JLabel operationJLabel = new JLabel("Matrix preset: ");
+        operationJLabel.setHorizontalAlignment(JLabel.CENTER);
         leftPanel.add(operationJLabel);
-        JComboBox<String> operationComboBox = new JComboBox<>(matrixOperations);
         leftPanel.add(operationComboBox);
 
+        this.operationComboBox.addActionListener(e -> {
+            switch ((String)this.operationComboBox.getSelectedItem()) {
+                case "linear":
+                    matrixFields[0][2].setText("0");
+                    matrixFields[1][2].setText("0");
+                    matrixFields[0][2].setEditable(false);
+                    matrixFields[1][2].setEditable(false);
+                    break;
+                case "affine":
+                    matrixFields[0][2].setEditable(true);
+                    matrixFields[1][2].setEditable(true);
+                    break;
+                case null:
+                default:
+                    break;
+            }
+        });
+
         JPanel rightPanel = new JPanel(new GridLayout(3, 4));
-        rightPanel.add(new JLabel("X"));
+        rightPanel.add(new JLabel("R / X", JLabel.CENTER));
         rightPanel.add(this.matrixFields[0][0]);
         rightPanel.add(this.matrixFields[0][1]);
         rightPanel.add(this.matrixFields[0][2]);
-        rightPanel.add(new JLabel("Y"));
+        rightPanel.add(new JLabel("G / Y", JLabel.CENTER));
         rightPanel.add(this.matrixFields[1][0]);
         rightPanel.add(this.matrixFields[1][1]);
         rightPanel.add(this.matrixFields[1][2]);
-        rightPanel.add(new JLabel("Z"));
+        rightPanel.add(new JLabel("B / -", JLabel.CENTER));
         rightPanel.add(this.matrixFields[2][0]);
         rightPanel.add(this.matrixFields[2][1]);
         rightPanel.add(this.matrixFields[2][2]);
@@ -68,7 +117,13 @@ public class ActionPanel extends JPanel {
                     matrix[n][m] = ImageTransformer.evaluate(this.matrixFields[n][m].getText());
                 }
             }
-            gui.setImage(ImageTransformer.transform(gui.getImage(), matrix, (ImageTransformer.MATRIX_TARGETS) Objects.requireNonNull(matrixTargetComboBox.getSelectedItem())));
+            BufferedImage newImage = ImageTransformer.transform(gui.getImage(), matrix, (ImageTransformer.MATRIX_TARGETS) Objects.requireNonNull(matrixTargetComboBox.getSelectedItem()));
+            if (newImage == null) {
+                //TODO implement
+                System.out.println("error");
+            } else {
+                gui.setImage(newImage);
+            }
         }
     }
 }
