@@ -2,6 +2,8 @@ package org.timomt;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
+import net.objecthunter.exp4j.Expression;
+import net.objecthunter.exp4j.ExpressionBuilder;
 
 public final class ImageTransformer {
     private ImageTransformer() {}
@@ -23,9 +25,7 @@ public final class ImageTransformer {
 
                     for (int i = 0; i < 3; i++) {
                         transformedRGB[i] = (int) (
-                                matrix[i][0] * rgb[0] +
-                                        matrix[i][1] * rgb[1] +
-                                        matrix[i][2] * rgb[2]
+                                matrix[i][0] * rgb[0] + matrix[i][1] * rgb[1] + matrix[i][2] * rgb[2]
                         );
                         if (transformedRGB[i] > 255) transformedRGB[i] = 255;
                         if (transformedRGB[i] < 0) transformedRGB[i] = 0;
@@ -39,9 +39,26 @@ public final class ImageTransformer {
             for (int x = 0; x < image.getWidth(); x++) {
                 for (int y = 0; y < image.getHeight(); y++) {
                     int[] rgb = imageRaster.getPixel(x, y, (int[]) null);
-                    int transformedXCoord = (int) Math.round(matrix[0][0] * x + matrix[0][1] * y + matrix[0][2]);
-                    int transformedYCoord = (int) Math.round(matrix[1][0] * x + matrix[1][1] * y + matrix[1][2]);
 
+                    /* Apply center-offset, so the Image gets manipulated relative to the center */
+                    int shiftedXCoord = x - (image.getWidth() / 2);
+                    int shiftedYCoord = y - (image.getHeight() / 2);
+
+                    /* Invert y-Coordinate because BufferedImage uses inverted y-Axis */
+                    shiftedYCoord = -shiftedYCoord;
+
+                    /* Apply actual matrix (and potential affine vector) */
+                    int transformedXCoord = (int) Math.round(matrix[0][0] * shiftedXCoord
+                            + matrix[0][1] * shiftedYCoord + matrix[0][2]);
+                    int transformedYCoord = (int) Math.round(matrix[1][0] * shiftedXCoord
+                            + matrix[1][1] * shiftedYCoord + matrix[1][2]);
+
+                    /* Invert y-Coordinate again because to apply center-offset */
+                    transformedYCoord = -transformedYCoord;
+                    transformedXCoord += (image.getWidth() / 2);
+                    transformedYCoord += (image.getHeight() / 2);
+
+                    /* Check if vector is inside of image bounds */
                     if (transformedXCoord >= 0 && transformedXCoord < image.getWidth()
                             && transformedYCoord >= 0 && transformedYCoord < image.getWidth()) {
                         newImageRaster.setPixel(transformedXCoord, transformedYCoord, rgb);
@@ -55,6 +72,10 @@ public final class ImageTransformer {
     }
 
     public static double evaluate(String str) {
-        return Double.parseDouble(str); // TODO: implement parser
+        Expression expr = new ExpressionBuilder(str)
+                .variables("pi", "e")
+                .build().setVariable("pi", Math.PI)
+                .setVariable("e", Math.E);
+        return expr.evaluate();
     }
 }

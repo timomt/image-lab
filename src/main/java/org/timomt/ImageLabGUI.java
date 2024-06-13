@@ -45,7 +45,7 @@ public class ImageLabGUI extends JFrame {
     public boolean saveImage(File f) {
         if (!f.exists()) return false;
         try {
-            ImageIO.write(this.image, "PNG" , f);
+            ImageIO.write(this.image, "jpg" , f);
             return true;
         } catch (IOException ex) {
             Logger.getLogger(ImageLabGUI.class.getName()).log(Level.INFO, null, ex);

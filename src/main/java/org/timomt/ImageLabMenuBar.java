@@ -46,6 +46,13 @@ public class ImageLabMenuBar extends JMenuBar {
             });
             if (retVal == JFileChooser.APPROVE_OPTION) {
                 File f = fileChooser.getSelectedFile();
+                if (!f.exists()) {
+                    try {
+                        f.createNewFile();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
                 if (!gui.saveImage(f)) {
                     ImageLabGUI.simpleMessageDialog("Image Lab: Save Image",
                             String.format("Could not save Image to file \"%s\"", f.getName()), "Okay");

@@ -2,7 +2,6 @@ package org.timomt;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Objects;
@@ -14,9 +13,9 @@ public class ActionPanel extends JPanel {
     };
 
     private final JTextField[][] matrixFields = {
-        { new JTextField("0.393"), new JTextField("0.769"), new JTextField("0.189") },
-        { new JTextField("0.347"), new JTextField("0.686"), new JTextField("0.168") },
-        { new JTextField("0.272"), new JTextField("0.534"), new JTextField("0.131") }
+        { new JTextField("1"), new JTextField("0"), new JTextField("0") },
+        { new JTextField("0"), new JTextField("1"), new JTextField("0") },
+        { new JTextField("0"), new JTextField("0"), new JTextField("1") }
     };
 
     private final JComboBox<ImageTransformer.MATRIX_TARGETS> matrixTargetComboBox =
@@ -40,8 +39,8 @@ public class ActionPanel extends JPanel {
                 matrixFields[2][0].setEditable(false);
                 matrixFields[2][1].setEditable(false);
                 matrixFields[2][2].setEditable(false);
-                matrixFields[0][2].setText("0");
-                matrixFields[1][2].setText("0");
+                matrixFields[0][2].setText("-");
+                matrixFields[1][2].setText("-");
                 matrixFields[0][2].setEditable(false);
                 matrixFields[1][2].setEditable(false);
                 operationComboBox.setModel(new DefaultComboBoxModel<>(new String[]{"linear", "affine"}));
@@ -69,12 +68,14 @@ public class ActionPanel extends JPanel {
         this.operationComboBox.addActionListener(e -> {
             switch ((String)this.operationComboBox.getSelectedItem()) {
                 case "linear":
-                    matrixFields[0][2].setText("0");
-                    matrixFields[1][2].setText("0");
+                    matrixFields[0][2].setText("-");
+                    matrixFields[1][2].setText("-");
                     matrixFields[0][2].setEditable(false);
                     matrixFields[1][2].setEditable(false);
                     break;
                 case "affine":
+                    matrixFields[0][2].setText("0");
+                    matrixFields[1][2].setText("0");
                     matrixFields[0][2].setEditable(true);
                     matrixFields[1][2].setEditable(true);
                     break;
@@ -114,7 +115,16 @@ public class ActionPanel extends JPanel {
             double[][] matrix = new double[3][3];
             for (int n = 0; n < 3; n++) {
                 for (int m = 0; m < 3; m++) {
-                    matrix[n][m] = ImageTransformer.evaluate(this.matrixFields[n][m].getText());
+                    if (this.matrixFields[n][m].isEditable()) {
+                        try {
+                            matrix[n][m] = ImageTransformer.evaluate(this.matrixFields[n][m].getText());
+                        } catch (Exception e) {
+                            ImageLabGUI.simpleMessageDialog("Image Lab: Apply Matrix", "Invalid Matrix input!", "Okay");
+                            return;
+                        }
+                    } else {
+                        matrix[n][m] = 0;
+                    }
                 }
             }
             BufferedImage newImage = ImageTransformer.transform(gui.getImage(), matrix, (ImageTransformer.MATRIX_TARGETS) Objects.requireNonNull(matrixTargetComboBox.getSelectedItem()));
