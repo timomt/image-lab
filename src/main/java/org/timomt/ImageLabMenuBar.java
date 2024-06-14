@@ -14,9 +14,10 @@ public class ImageLabMenuBar extends JMenuBar {
 
         JMenu fileMenu = new JMenu("Image");
 
-        JMenuItem loadImage = new JMenuItem("Load Image ...");  // TODO: not supporting png, only jpg
+        JMenuItem loadImage = new JMenuItem("Load Image ...");
         loadImage.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
+
             int retVal = fileChooser.showOpenDialog(loadImage);
             if (retVal == JFileChooser.APPROVE_OPTION) {
                 File f = fileChooser.getSelectedFile();
@@ -36,12 +37,12 @@ public class ImageLabMenuBar extends JMenuBar {
             fileChooser.addChoosableFileFilter(new FileFilter() {
                 @Override
                 public boolean accept(File f) {
-                    return f.isDirectory() || f.getName().endsWith(".png");
+                    return f.isDirectory() || f.getName().endsWith(".jpg");
                 }
 
                 @Override
                 public String getDescription() {
-                    return "PNG files (*.png)";
+                    return "JPG files (*.jpg)";
                 }
             });
             if (retVal == JFileChooser.APPROVE_OPTION) {

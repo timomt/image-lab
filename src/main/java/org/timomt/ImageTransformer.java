@@ -18,12 +18,18 @@ public final class ImageTransformer {
         WritableRaster newImageRaster = newImage.getRaster();
 
         if (target == MATRIX_TARGETS.RGB) {
+            if (imageRaster.getPixel(0, 0, (int[]) null).length != matrix.length) {
+                ImageLabGUI.simpleMessageDialog("Image Lab: Apply Matrix",
+                        "Could not transform image due to color spectrum not represented as 3x1 matrix",
+                        "Okay");
+                return image;
+            }
             for (int x = 0; x < image.getWidth(); x++) {
                 for (int y = 0; y < image.getHeight(); y++) {
                     int[] rgb = imageRaster.getPixel(x, y, (int[]) null);
-                    int[] transformedRGB = new int[3];
+                    int[] transformedRGB = new int[rgb.length];
 
-                    for (int i = 0; i < 3; i++) {
+                    for (int i = 0; i < transformedRGB.length; i++) {
                         transformedRGB[i] = (int) (
                                 matrix[i][0] * rgb[0] + matrix[i][1] * rgb[1] + matrix[i][2] * rgb[2]
                         );
@@ -60,7 +66,7 @@ public final class ImageTransformer {
 
                     /* Check if vector is inside of image bounds */
                     if (transformedXCoord >= 0 && transformedXCoord < image.getWidth()
-                            && transformedYCoord >= 0 && transformedYCoord < image.getWidth()) {
+                            && transformedYCoord >= 0 && transformedYCoord < image.getHeight()) {
                         newImageRaster.setPixel(transformedXCoord, transformedYCoord, rgb);
                     }
                 }
