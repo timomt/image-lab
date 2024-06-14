@@ -8,7 +8,16 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * ImageLabMenuBar:
+ * the main JMenuBar of the application
+ */
 public class ImageLabMenuBar extends JMenuBar {
+    /**
+     * ImageLabMenuBar:
+     * constructor to initialize ImageLabMenuBar.
+     * @param gui the parent container.
+     */
     public ImageLabMenuBar(ImageLabGUI gui) {
         this.setLayout(new BorderLayout());
 

@@ -6,23 +6,48 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Objects;
 
+/**
+ * ActionPanel
+ * the main JPanel.
+ */
 public class ActionPanel extends JPanel {
 
+    /**
+     * matrixOperations:
+     * all available matrix presets.
+     */
     private static final String[] matrixOperations = {
             "empty", "mirrorX", "mirrorY", "rotate", "rotateX", "rotateY", "rotateZ"
     };
 
+    /**
+     * matrixFields:
+     * input fields for the user matrix.
+     */
     private final JTextField[][] matrixFields = {
         { new JTextField("1"), new JTextField("0"), new JTextField("0") },
         { new JTextField("0"), new JTextField("1"), new JTextField("0") },
         { new JTextField("0"), new JTextField("0"), new JTextField("1") }
     };
 
+    /**
+     * matrixTargetComboBox:
+     * a JComboBox to select the target property.
+     */
     private final JComboBox<ImageTransformer.MATRIX_TARGETS> matrixTargetComboBox =
             new JComboBox<>(ImageTransformer.MATRIX_TARGETS.values());
 
+    /**
+     * operationComboBox
+     * a JComboBox to select a preset operation.
+     */
     private final JComboBox<String> operationComboBox = new JComboBox<>(matrixOperations);
 
+    /**
+     * ActionPanel:
+     * default constructor.
+     * @param gui the parent container.
+     */
     public ActionPanel(ImageLabGUI gui) {
         this.setLayout(new GridLayout(1, 3, 10, 10));
         this.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -107,6 +132,11 @@ public class ActionPanel extends JPanel {
         this.add(applyButton);
     }
 
+    /**
+     * applyMatrix:
+     * applies the current matrix to the image specified in the parent container.
+     * @param gui the parent container.
+     */
     private void applyMatrix(ImageLabGUI gui) {
         BufferedImage image = gui.getImage();
         if (image == null) {

@@ -11,10 +11,27 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * ImageLabGui:
+ * JFrame this application is built on.
+ */
 public class ImageLabGUI extends JFrame {
+    /**
+     * image:
+     * the image to be displayed and altered.
+     */
     private BufferedImage image = null;
+
+    /**
+     * imageLabel:
+     * the container of this.image.
+     */
     private final JLabel imageLabel = new JLabel();
 
+    /**
+     * ImageLabGUI:
+     * default constructor.
+     */
     public ImageLabGUI() {
         JPanel mainPanel = new JPanel();
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -33,15 +50,29 @@ public class ImageLabGUI extends JFrame {
         this.setVisible(true);
     }
 
+    /**
+     * setImage:
+     * Replaces the current image and updates the UI.
+     * @param image the new image
+     */
     public void setImage(BufferedImage image) {
         this.image = image;
         updateImage();
     }
 
+    /**
+     * getImage
+     * @return this.image - the current image.
+     */
     public BufferedImage getImage() {
         return this.image;
     }
 
+    /**
+     * saveImage
+     * @param f the file to be saved to
+     * @return true if the process was successful (currently only in JPG format).
+     */
     public boolean saveImage(File f) {
         if (!f.exists()) return false;
         try {
@@ -52,10 +83,22 @@ public class ImageLabGUI extends JFrame {
         }
         return false;
     }
+
+    /**
+     * updateImage:
+     * updates the display image.
+     */
     private void updateImage() {
         this.imageLabel.setIcon(new ImageIcon(this.image));
     }
 
+    /**
+     * simpleMessageDialog
+     * a JDialog preset for consistent message dialogs.
+     * @param title the title of the window.
+     * @param message the message to be displayed.
+     * @param buttonText the text of the closing button.
+     */
     public static void simpleMessageDialog(String title, String message, String buttonText) {
         JDialog jDialog = new JDialog();
         jDialog.setTitle(title);

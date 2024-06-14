@@ -5,13 +5,37 @@ import java.awt.image.WritableRaster;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
+/**
+ * ImageTransformer:
+ * utility class to perform matrix operations on BufferedImages.
+ */
 public final class ImageTransformer {
     private ImageTransformer() {}
 
+    /**
+     * MATRIX_TARGETS:
+     * supported image target properties to be altered by matrix operations.
+     */
     public enum MATRIX_TARGETS  {
-            RGB, XY
-    };
+        /**
+         * RGB: 3x1 matrix (red, green and blue).
+         */
+        RGB,
 
+        /**
+         * XY: 2x1 matrix (x and y coordinate).
+         */
+        XY
+    }
+
+    /**
+     * transform:
+     * performs the specified matrix transformation on the specified image.
+     * @param image the image to be transformed.
+     * @param matrix the transformation matrix.
+     * @param target the image property to transform.
+     * @return the new transformed image.
+     */
     public static BufferedImage transform(BufferedImage image, double[][] matrix, MATRIX_TARGETS target) {
         WritableRaster imageRaster = image.getRaster();
         BufferedImage newImage = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
@@ -77,6 +101,12 @@ public final class ImageTransformer {
         return null;
     }
 
+    /**
+     * evaluate
+     * evaluates a String mathematically
+     * @param str the String to be evaluated
+     * @return the resulting double
+     */
     public static double evaluate(String str) {
         Expression expr = new ExpressionBuilder(str)
                 .variables("pi", "e")
