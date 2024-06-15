@@ -17,7 +17,7 @@ public class ActionPanel extends JPanel {
      * all available matrix presets.
      */
     private static final String[] matrixOperations = {
-            "empty", "mirrorX", "mirrorY", "rotate", "rotateX", "rotateY", "rotateZ"
+            "empty", "switch R&G", "switch R&B", "switch G&B"
     };
 
     /**
@@ -104,6 +104,46 @@ public class ActionPanel extends JPanel {
                     matrixFields[0][2].setEditable(true);
                     matrixFields[1][2].setEditable(true);
                     break;
+                case "empty":
+                    for (int i = 0; i < 3; i++) {
+                        matrixFields[i][0].setText("1");
+                        matrixFields[i][1].setText("0");
+                        matrixFields[i][2].setText("0");
+                    }
+                    break;
+                case "switch R&G":
+                    matrixFields[0][0].setText("0");
+                    matrixFields[0][1].setText("1");
+                    matrixFields[0][2].setText("0");
+                    matrixFields[1][0].setText("1");
+                    matrixFields[1][1].setText("0");
+                    matrixFields[1][2].setText("0");
+                    matrixFields[2][0].setText("0");
+                    matrixFields[2][1].setText("0");
+                    matrixFields[2][2].setText("1");
+                    break;
+                case "switch R&B":
+                    matrixFields[0][0].setText("0");
+                    matrixFields[0][1].setText("0");
+                    matrixFields[0][2].setText("1");
+                    matrixFields[1][0].setText("0");
+                    matrixFields[1][1].setText("1");
+                    matrixFields[1][2].setText("0");
+                    matrixFields[2][0].setText("1");
+                    matrixFields[2][1].setText("0");
+                    matrixFields[2][2].setText("0");
+                    break;
+                case "switch G&B":
+                    matrixFields[0][0].setText("1");
+                    matrixFields[0][1].setText("0");
+                    matrixFields[0][2].setText("0");
+                    matrixFields[1][0].setText("0");
+                    matrixFields[1][1].setText("0");
+                    matrixFields[1][2].setText("1");
+                    matrixFields[2][0].setText("0");
+                    matrixFields[2][1].setText("1");
+                    matrixFields[2][2].setText("0");
+                    break;
                 default:
                     break;
             }
@@ -158,8 +198,7 @@ public class ActionPanel extends JPanel {
             }
             BufferedImage newImage = ImageTransformer.transform(gui.getImage(), matrix, (ImageTransformer.MATRIX_TARGETS) Objects.requireNonNull(matrixTargetComboBox.getSelectedItem()));
             if (newImage == null) {
-                //TODO implement
-                System.out.println("error");
+                ImageLabGUI.simpleMessageDialog("Image Lab: Apply Matrix", "Could not perform matrix operation!", "Okay");
             } else {
                 gui.setImage(newImage);
             }
