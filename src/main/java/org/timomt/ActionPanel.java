@@ -91,7 +91,7 @@ public class ActionPanel extends JPanel {
         leftPanel.add(operationComboBox);
 
         this.operationComboBox.addActionListener(e -> {
-            switch ((String)this.operationComboBox.getSelectedItem()) {
+            switch ((String) Objects.requireNonNull(this.operationComboBox.getSelectedItem())) {
                 case "linear":
                     matrixFields[0][2].setText("-");
                     matrixFields[1][2].setText("-");
@@ -104,7 +104,6 @@ public class ActionPanel extends JPanel {
                     matrixFields[0][2].setEditable(true);
                     matrixFields[1][2].setEditable(true);
                     break;
-                case null:
                 default:
                     break;
             }
