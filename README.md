@@ -17,6 +17,8 @@
 - Image transformations are generally calculated relatively to the center of the image, not the top left corner
 - The cartesian coordinate system is used for matrix transformations
 - Color transformation is currently only supported on images with a color spectrum representable as a 3x1 matrix (e.g., RGB)
+- The input fields are evaluated using exp4j (https://github.com/fasseg/exp4j), allowing for mathematical inputs such as cos() and sin().
+  For more information on its capabilities, refer to the repository and documentation (https://www.objecthunter.net/  exp4j/), particularly the sections on "Built-in operators" and "Built-in functions."
 
 ## Table of Contents
 
