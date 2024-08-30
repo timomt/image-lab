@@ -2,7 +2,7 @@
 
 ## Overview
 
-**Image Matrix Transformer** is a simple Java Swing application that allows you to load images and apply matrix transformations to their color (e.g., RGB) and coordinate properties. This tool is designed to help you visualize how matrices can be used to alter images, providing a better understanding of linear as well as affine transformations in the context of image processing.
+**image-lab** is a simple Java Swing application that allows you to load images and apply matrix transformations to their color (e.g., RGB) and coordinate properties. This tool is designed to help you visualize how matrices can be used to alter images, providing a better understanding of linear as well as affine transformations in the context of image processing.
 
 ## Features
 
